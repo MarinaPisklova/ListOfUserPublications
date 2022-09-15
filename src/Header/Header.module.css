@@ -1,0 +1,18 @@
+.titleBox {
+    width: 60%;
+    padding: 10px 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.title {
+    font-size: 32px;
+    color: #62D0DF;
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #22356F;
+}
