@@ -1,7 +1,11 @@
 import React, { ChangeEvent, FormEvent, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
+import styled from "styled-components";
 import { Button } from "../Button";
-import styles from "./Form.module.css";
+import { Flex } from "../shared/Flex";
+import { Error } from './../Error';
+import { FormTitle } from "./FormTitle/FormTitle";
+import { Input } from "./Input";
 
 interface IProps {
   title: string;
@@ -19,6 +23,29 @@ interface IProps {
   idDisabled: boolean;
 }
 
+const WrapperForm = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 40px 16px 23px 15px;
+  transform: translate(-50%, -50%);
+  border: 5px solid #27569C;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+
+  @media (max-width: 500px){
+    position: static;
+    top: 0;
+    left: 0;
+    transform: none;
+    margin: 14px 15px 0 15px;
+  }
+
+  @media (max-width: 400px){
+    padding: 12px 16px 27px 9px;
+  }
+`
+
 export function Form(props: IProps) {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -27,36 +54,35 @@ export function Form(props: IProps) {
   }, []);
 
   return (
-    <div className={styles.formBox}>
-      <h3 className={styles.title}>{props.title}</h3>
-      <form className={styles.form} onSubmit={props.handleSubmit}>
-        <div className={styles.box}>
-          <input
+    <WrapperForm>
+      <Flex direction="column">
+        <FormTitle title={props.title} />
+        <form onSubmit={props.handleSubmit}>
+          <Input
+            label="login"
+            id="login"
             type="text"
-            className={styles.input}
-            autoComplete="on"
-            placeholder="Имя"
             value={props.login}
             onChange={props.handleChangeLogin}
-            aria-invalid={!props.isValidLogin ? true : undefined}
+            isValid={props.isValidLogin}
             ref={ref}
           />
-          <input
+          <Input
+            label="password"
+            id="password"
             type="password"
-            className={styles.input}
-            autoComplete="on"
-            placeholder="Пароль"
             value={props.password}
             onChange={props.handleChangePassword}
-            aria-invalid={!props.isValidPassword ? true : undefined}
+            isValid={props.isValidPassword}
+            ref={ref}
           />
-        </div>
-        {props.messageError && (<p className={styles.error}>{props.messageError}</p>)}
-        {props.isSuccessLogIn && (<Navigate to={props.redirect} />)}
-        <Button disabled={props.idDisabled} type='submit'>
-          {props.idDisabled ? "Загрузка..." : props.btnName}
-        </Button>
-      </form>
-    </div>
+          {props.messageError && (<Error message={props.messageError} />)}
+          {props.isSuccessLogIn && (<Navigate to={props.redirect} />)}
+          <Button disabled={props.idDisabled} type='submit'>
+            {props.idDisabled ? "Загрузка..." : props.btnName}
+          </Button>
+        </form>
+      </Flex>
+    </WrapperForm>
   );
 }

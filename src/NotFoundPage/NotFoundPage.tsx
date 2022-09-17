@@ -1,12 +1,20 @@
 import React from "react";
-import styles from "./NotFoundPage.module.css";
+import styled from "styled-components";
+
+const Wrapper404Page = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+`
 
 export function NotFoundPage() {
   return (
-    <div className={styles.box}>
+    <Wrapper404Page>
       <h1>404 Error</h1>
       <h2>PAGE NOT FOUND</h2>
       <p>I think you just went to a page non - existing page.</p>
-    </div>
+    </Wrapper404Page>
   )
 }

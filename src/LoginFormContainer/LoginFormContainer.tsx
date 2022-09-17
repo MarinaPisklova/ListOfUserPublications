@@ -1,63 +1,54 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import axios, { AxiosError } from 'axios';
-import { useDispatch } from 'react-redux';
 import { Form } from '../Form';
-import { Error } from '../Error';
-import { postsRequestAsync, RootState } from '../store/reducer';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { RootState } from '../store/reducer';
 import { useSelector } from 'react-redux';
 
-type AppDispatch = ThunkDispatch<RootState, any, AnyAction>;
-
 export function LoginFormContainer() {
-  const [login, setLogin] = useState("");
+  const [inputLogin, setInputLogin] = useState("");
   const [isValidLogin, setIsValidLogin] = useState(true);
-  const [password, setPassword] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [messageError, setMessageError] = useState('');
   const [isSuccessLogIn, setIsSuccessLogIn] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
 
-  const error = useSelector<RootState, string>(state => state.error);
-  const loading = useSelector<RootState, boolean>(state => state.loading);
-
+  const login = useSelector<RootState, string>(state => state.login);
+  const password = useSelector<RootState, string>(state => state.password);
 
   function handleChangeLogin(event: ChangeEvent<HTMLInputElement>) {
     setIsValidLogin(true);
-    setLogin(event.target.value);
+    setInputLogin(event.target.value);
   }
 
   function handleChangePassword(event: ChangeEvent<HTMLInputElement>) {
     setIsValidPassword(true);
-    setPassword(event.target.value);
+    setInputPassword(event.target.value);
   }
 
   function handleSubmit(event: FormEvent) {
     setIsDisabled(true);
     event.preventDefault();
-    // setMessageError(validateInputs());
-    // const isFormValid = !validateInputs();
-    // if (!isFormValid){
-    //   setIsDisabled(false);
-    //   return;
-    // }
-    dispatch(postsRequestAsync());
+    setMessageError(validateInputs());
+    const isFormValid = !validateInputs();
+    if (!isFormValid){
+      setIsDisabled(false);
+      return;
+    }
+    setIsSuccessLogIn(true);
     setIsDisabled(false);
   }
 
   function validateInputs() {
     let errorMessage = "";
 
-    if (login.length <= 2) {
+    if (inputLogin != login) {
       setIsValidLogin(false);
-      errorMessage += 'Логин должен быть больше 5 символов \n';
+      errorMessage += 'Неверный логин \n';
     }
 
-    if (password.length <= 2) {
+    if (inputPassword != password) {
       setIsValidPassword(() => false);
-      errorMessage += 'Пароль должен быть больше 5 символов';
+      errorMessage += 'Неверный пароль';
     }
     return errorMessage;
   }
@@ -66,20 +57,19 @@ export function LoginFormContainer() {
     <>
       <Form
         title={"Autorization"}
-        login={login}
-        password={password}
+        login={inputLogin}
+        password={inputPassword}
         isValidLogin={isValidLogin}
         isValidPassword={isValidPassword}
         handleSubmit={handleSubmit}
         handleChangeLogin={handleChangeLogin}
         handleChangePassword={handleChangePassword}
         messageError={messageError}
-        isSuccessLogIn={loading}
+        isSuccessLogIn={isSuccessLogIn}
         btnName={"Submit"}
         redirect={"/posts"}
         idDisabled={isDisabled}
       />
-      {error && <Error message={error} />}
     </>
   )
 }

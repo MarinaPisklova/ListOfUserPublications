@@ -100,11 +100,11 @@ export const postsRequestAsync = (): ThunkAction<void, RootState, unknown, MyAct
 
       return axios.all(promises);
     })
-    .then((arr)=>{
-      dispatch(postsRequestSuccess(arr[arr.length-1]));
+    .then((arr) => {
+      dispatch(postsRequestSuccess(arr[arr.length - 1]));
     })
-    .catch ((error) => {
-  console.log(error);
-  dispatch(postsRequestError(String(error)));
-})
+    .catch((error) => {
+      console.log(error);
+      dispatch(postsRequestError(String(error)));
+    })
 }

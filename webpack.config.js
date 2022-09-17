@@ -60,12 +60,22 @@ module.exports = {
         {
             test: GLOBAL_CSS_REGEXP,
             use: ['style-loader', 'css-loader', 'sass-loader']
+        },
+        {
+            test: /\.(png|jpe?g|gif)$/i,
+            use: [
+                {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath :  '/images/'
+                    }
+                },
+            ],
         }
         ]
     },
-    plugins: [
-        new HTMLWebpackPlugin({ template: path.resolve(__dirname, 'index.html') })
-    ],
+    plugins: [new HTMLWebpackPlugin({ template: path.resolve(__dirname, 'index.html') })],
     devServer: {
         port: 3000,
         open: true,
