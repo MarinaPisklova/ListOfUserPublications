@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Text } from '../../shared/Text';
-import { IPost } from './../../store/reducer';
-import { Flex } from './../../shared/Flex/Flex';
-import { Image } from './../../shared/Image/Image';
+import { Text } from '../../../shared/Text';
+import { IPost } from '../../../store/reducer';
+import { Flex } from '../../../shared/Flex/Flex';
+import { Image } from '../../../shared/Image/Image';
 
 interface IPostProps {
   post: IPost;

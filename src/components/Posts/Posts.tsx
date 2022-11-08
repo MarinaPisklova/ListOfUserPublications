@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Flex } from '../shared/Flex';
-import { postsRequestAsync, RootState } from '../store/reducer';
-import { IPost } from './../store/reducer';
-import { Post } from './Post/Post';
-import { useEffect } from 'react';
+import { Flex } from '../../shared/Flex';
+import { postsRequestAsync, RootState } from '../../store/reducer';
+import { IPost } from '../../store/reducer';
+// import { Post } from './Post/Post';
+import { useEffect, useRef } from 'react';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Loader } from '../Loader';
-import { Error } from './../Error';
+import { Loader } from '../UI/Loader';
+import { Error } from '../Error';
+import { Post } from './Post/Post';
+import { useObserver } from '../../hooks/useObserver';
 
 const Li = styled.li`
   list-style-type: none;
@@ -47,23 +49,26 @@ const ContentFlex = styled(Flex)`
     gap: 0px;
   }
 `
-
 const XLoader = styled.div`
   margin-top: 200px;
 
 `
-
 type AppDispatch = ThunkDispatch<RootState, any, AnyAction>;
 
 export function Posts() {
   const dispatch = useDispatch<AppDispatch>();
   const posts = useSelector<RootState, IPost[]>(state => state.posts);
   const error = useSelector<RootState, string>(state => state.error);
+  const loading = useSelector<RootState, boolean>(state => state.loading);
+  const lastElement = useRef<HTMLDivElement>(null);
+
+  useObserver(lastElement, true, loading, () => {
+    dispatch(postsRequestAsync());
+  });
 
   useEffect(() => {
     dispatch(postsRequestAsync());
   }, []);
-
 
   let postsElements = posts.map((post) =>
     <Li key={post.userId} >
@@ -80,6 +85,7 @@ export function Posts() {
           <Error message={error} />
         )}
       </ContentFlex>
+      <div ref={lastElement} style={{ height: "100px"}} ></div>
     </Content>
   )
 }

@@ -20,8 +20,8 @@ const StyledLogo = styled.img<ILogoProps>`
 `
 
 export function Logo(props:ILogoProps){
-  const logoSrc = require("./../../public/images/logo.png").default;
-  const logoMobileSrc = require("./../../public/images/logo_mobile.png").default;
+  const logoSrc = require("./../../../public/images/logo.png").default;
+  const logoMobileSrc = require("./../../../public/images/logo_mobile.png").default;
 
   return (
     <StyledLogo {...props} logo_desktop={logoSrc} logo_mobile={logoMobileSrc} alt="logo"/>

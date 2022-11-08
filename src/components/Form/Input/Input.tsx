@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import styled from "styled-components";
-import { Flex } from "../../shared/Flex";
+import { Flex } from "../../../shared/Flex";
 import { Label } from "../Label";
 
 interface IInputProps {

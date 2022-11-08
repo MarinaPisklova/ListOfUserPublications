@@ -1,9 +1,15 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Form } from '../Form';
-import { RootState } from '../store/reducer';
-import { useSelector } from 'react-redux';
+import { RootState } from '../../store/reducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { setIsAuth } from '../../store/actions';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+type AppDispatch = ThunkDispatch<RootState, any, AnyAction>;
 
 export function LoginFormContainer() {
+  const dispatch = useDispatch<AppDispatch>();
   const [inputLogin, setInputLogin] = useState("");
   const [isValidLogin, setIsValidLogin] = useState(true);
   const [inputPassword, setInputPassword] = useState("");
@@ -35,6 +41,8 @@ export function LoginFormContainer() {
       return;
     }
     setIsSuccessLogIn(true);
+    dispatch(setIsAuth(true));
+    localStorage.setItem('auth', 'true');
     setIsDisabled(false);
   }
 

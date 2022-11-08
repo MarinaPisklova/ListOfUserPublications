@@ -1,11 +1,13 @@
 import React, { ChangeEvent, FormEvent, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "../Button";
-import { Flex } from "../shared/Flex";
-import { Error } from './../Error';
+import { Flex } from "../../shared/Flex";
+import { Error } from '../Error';
 import { FormTitle } from "./FormTitle/FormTitle";
 import { Input } from "./Input";
+import { Button } from "../UI/Button";
+import { useSelector } from 'react-redux';
+import { RootState } from "../../store/reducer";
 
 interface IProps {
   title: string;
@@ -48,6 +50,7 @@ const WrapperForm = styled.div`
 
 export function Form(props: IProps) {
   const ref = useRef<HTMLInputElement>(null);
+  const isAuth = useSelector<RootState, boolean>(state => state.isAuth);
 
   useEffect(() => {
     ref.current?.focus();

@@ -77,6 +77,7 @@ module.exports = {
     },
     plugins: [new HTMLWebpackPlugin({ template: path.resolve(__dirname, 'index.html') })],
     devServer: {
+        historyApiFallback: true,
         port: 3000,
         open: true,
         hot: IS_DEV

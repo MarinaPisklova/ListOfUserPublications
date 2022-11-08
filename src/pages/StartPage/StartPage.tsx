@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Header } from '../Header';
-import { LoginFormContainer } from '../LoginFormContainer';
+import { Header } from '../../components/Header';
+import { LoginFormContainer } from '../../components/LoginFormContainer';
 
 export function StartPage() {
   return (

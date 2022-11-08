@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { Flex } from '../../shared/Flex';
 import { Logo } from '../Logo';
-import { Flex } from '../shared/Flex';
+
+
 
 const StyledHeader = styled.header`
     height: 118px;
@@ -18,11 +20,9 @@ const StyledHeader = styled.header`
         padding-right: 15px;
     }
 `
-
 const WrapperLogoLink = styled.div`
     margin-right: auto;
 `
-
 
 export function Header(props: { children?: React.ReactNode }) {
     return (

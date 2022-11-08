@@ -1,7 +1,7 @@
 import { Reducer, ThunkAction } from '@reduxjs/toolkit';
 import axios from "axios";
 import { AnyAction } from 'redux';
-import { postsRequest, postsRequestError, postsRequestSuccess, POSTS_REQUEST, POSTS_REQUEST_ERROR, POSTS_REQUEST_SUCCESS } from './actions';
+import { postsRequest, postsRequestError, postsRequestSuccess, POSTS_REQUEST, POSTS_REQUEST_ERROR, POSTS_REQUEST_SUCCESS, SET_IS_AUTH } from './actions';
 
 export interface IPost {
   userId: number,
@@ -13,6 +13,7 @@ export interface IPost {
 }
 
 export type RootState = {
+  isAuth: boolean;
   login: string;
   password: string;
   posts: IPost[];
@@ -21,6 +22,7 @@ export type RootState = {
 }
 
 export const initialState: RootState = {
+  isAuth: false,
   login: "user",
   password: "12345",
   posts: [],
@@ -32,6 +34,12 @@ type MyAction = AnyAction;
 
 export const rootReducer: Reducer<RootState, MyAction> = (state = initialState, action) => {
   switch (action.type) {
+    case SET_IS_AUTH: {
+      return {
+        ...state,
+        isAuth: action.isAuth,
+      }
+    }
     case POSTS_REQUEST: {
       return {
         ...state,
@@ -41,7 +49,7 @@ export const rootReducer: Reducer<RootState, MyAction> = (state = initialState, 
     case POSTS_REQUEST_SUCCESS: {
       return {
         ...state,
-        posts: action.posts,
+        posts: [...state.posts, ...action.posts],
         loading: false,
       }
     }
