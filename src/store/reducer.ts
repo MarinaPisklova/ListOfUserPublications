@@ -2,32 +2,40 @@ import { Reducer, ThunkAction } from '@reduxjs/toolkit';
 import axios from "axios";
 import { AnyAction } from 'redux';
 import { postsRequest, postsRequestError, postsRequestSuccess, POSTS_REQUEST, POSTS_REQUEST_ERROR, POSTS_REQUEST_SUCCESS, SET_IS_AUTH } from './actions';
+import PostSevice from './../API/PostService';
 
 export interface IPost {
   userId: number,
   name: string,
   company: string,
+  postId: number,
   title: string,
   body: string,
   img: string,
+}
+
+export interface IPostsData {
+  posts: IPost[];
+  loading: boolean;
+  error: string;
 }
 
 export type RootState = {
   isAuth: boolean;
   login: string;
   password: string;
-  posts: IPost[];
-  loading: boolean;
-  error: string;
+  postsData: IPostsData;
 }
 
 export const initialState: RootState = {
   isAuth: false,
   login: "user",
   password: "12345",
-  posts: [],
-  loading: false,
-  error: "",
+  postsData: {
+    posts: [],
+    loading: false,
+    error: "",
+  }
 }
 
 type MyAction = AnyAction;
@@ -43,20 +51,31 @@ export const rootReducer: Reducer<RootState, MyAction> = (state = initialState, 
     case POSTS_REQUEST: {
       return {
         ...state,
-        loading: true,
+        postsData: {
+          posts: [...state.postsData.posts],
+          loading: true,
+          error: ""
+        }
       }
     }
     case POSTS_REQUEST_SUCCESS: {
       return {
         ...state,
-        posts: [...state.posts, ...action.posts],
-        loading: false,
+        postsData: {
+          posts: [...state.postsData.posts, ...action.posts],
+          loading: false,
+          error: ""
+        }
       }
     }
     case POSTS_REQUEST_ERROR: {
       return {
         ...state,
-        error: action.error,
+        postsData: {
+          posts: [...state.postsData.posts],
+          loading: false,
+          error: action.error
+        }
       }
     }
     default:
@@ -64,9 +83,10 @@ export const rootReducer: Reducer<RootState, MyAction> = (state = initialState, 
   }
 }
 
-export const postsRequestAsync = (): ThunkAction<void, RootState, unknown, MyAction> => (dispatch, getState) => {
+export const postsRequestAsync = (page = 1): ThunkAction<void, RootState, unknown, MyAction> => (dispatch, getState) => {
   dispatch(postsRequest());
-  axios.get("https://jsonplaceholder.typicode.com/users")
+
+  PostSevice.getUsers()
     .then((resp) => {
       const usersData = resp.data;
       let posts: IPost[] = [];
@@ -76,6 +96,7 @@ export const postsRequestAsync = (): ThunkAction<void, RootState, unknown, MyAct
       }) => {
         let post = {
           userId: user.id,
+          postId: -1,
           name: user.name,
           company: user.company.name,
           title: "",
@@ -91,13 +112,14 @@ export const postsRequestAsync = (): ThunkAction<void, RootState, unknown, MyAct
       posts.map((post) => {
         promises.push(
           axios.all([
-            axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${post.userId}`),
-            axios.get(`https://jsonplaceholder.typicode.com/photos?albumId=${post.userId}`)
+            PostSevice.getPostByUserId(post.userId),
+            PostSevice.getPhotosByUserId(post.userId)
           ])
             .then(axios.spread(function (postsInfo, photosInfo) {
-              const postInfo = postsInfo.data[0];
-              const photoInfo = photosInfo.data[0];
+              const postInfo = postsInfo.data[page - 1];
+              const photoInfo = photosInfo.data[page - 1];
 
+              post.postId = postInfo.id;
               post.title = postInfo.title;
               post.body = postInfo.body;
               post.img = photoInfo.thumbnailUrl;
@@ -105,7 +127,6 @@ export const postsRequestAsync = (): ThunkAction<void, RootState, unknown, MyAct
         )
       });
       promises.push(posts);
-
       return axios.all(promises);
     })
     .then((arr) => {

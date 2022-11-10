@@ -7,7 +7,7 @@ import { Logo } from '../Logo';
 
 
 const StyledHeader = styled.header`
-    height: 118px;
+    height: 7vh;
     padding: 27px 36px 28px 41px;
     background: #E4B062;
 

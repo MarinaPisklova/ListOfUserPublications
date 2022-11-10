@@ -1,4 +1,5 @@
 import { ActionCreator } from "redux";
+import { IPost } from './reducer';
 
 export const SET_IS_AUTH = "SET_IS_AUTH";
 export type SetIsAuthAction = {
@@ -30,7 +31,7 @@ export const postsRequestError: ActionCreator<PostsRequestErrorAction> = (error)
 export const POSTS_REQUEST_SUCCESS = "POSTS_REQUEST_SUCCESS";
 export type PostsRequestSuccessAction = {
   type: typeof POSTS_REQUEST_SUCCESS;
-  posts: string;
+  posts: IPost[];
 }
 export const postsRequestSuccess: ActionCreator<PostsRequestSuccessAction> = (posts) => (
   { type: POSTS_REQUEST_SUCCESS, posts }
