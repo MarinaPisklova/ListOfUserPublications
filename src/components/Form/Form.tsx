@@ -2,12 +2,12 @@ import React, { ChangeEvent, FormEvent, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import styled from "styled-components";
 import { Flex } from "../../shared/Flex";
-import { Error } from '../Error';
+import { Error } from '../UI/Error';
 import { FormTitle } from "./FormTitle/FormTitle";
-import { Input } from "./Input";
 import { Button } from "../UI/Button";
 import { useSelector } from 'react-redux';
 import { RootState } from "../../store/reducer";
+import { Input } from "../UI/Input";
 
 interface IProps {
   title: string;

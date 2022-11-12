@@ -1,17 +1,19 @@
-import { Reducer, ThunkAction } from '@reduxjs/toolkit';
+import { Reducer, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import axios from "axios";
 import { AnyAction } from 'redux';
 import { postsRequest, postsRequestError, postsRequestSuccess, POSTS_REQUEST, POSTS_REQUEST_ERROR, POSTS_REQUEST_SUCCESS, SET_IS_AUTH } from './actions';
 import PostSevice from './../API/PostService';
 
+export type AppDispatch = ThunkDispatch<RootState, any, AnyAction>;
+
 export interface IPost {
-  userId: number,
-  name: string,
-  company: string,
-  postId: number,
-  title: string,
-  body: string,
-  img: string,
+  userId: number;
+  name: string;
+  company: string;
+  postId: number;
+  title: string;
+  body: string;
+  img: string;
 }
 
 export interface IPostsData {
@@ -35,7 +37,7 @@ export const initialState: RootState = {
     posts: [],
     loading: false,
     error: "",
-  }
+  },
 }
 
 type MyAction = AnyAction;
@@ -90,7 +92,7 @@ export const postsRequestAsync = (page = 1): ThunkAction<void, RootState, unknow
     .then((resp) => {
       const usersData = resp.data;
       let posts: IPost[] = [];
-
+  
       usersData.map((user: {
         company: any; id: any; name: any;
       }) => {

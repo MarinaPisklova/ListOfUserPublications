@@ -4,6 +4,7 @@ import { Text } from '../../../shared/Text';
 import { IPost } from '../../../store/reducer';
 import { Flex } from '../../../shared/Flex/Flex';
 import { Image } from '../../../shared/Image/Image';
+import { useNavigate } from 'react-router-dom';
 
 interface IPostProps {
   post: IPost;
@@ -71,9 +72,14 @@ const PostTitle = styled(Text)`
 `
 
 
+
+
 export function Post(props: IPostProps) {
+  const router = useNavigate();
+
+
   return (
-    <PostWrapper>
+    <PostWrapper onClick={()=> router(`/posts/${props.post.postId}`)}>
       <HeaderPostWrapper margin='0 0 22px 0' align='flex-start' justify='flex-start'>
         <PostImage margin='0 30px 0 0' src={props.post.img} />
         <Flex direction='column' align='flex-start'>
