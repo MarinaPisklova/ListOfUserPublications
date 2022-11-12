@@ -7,8 +7,9 @@ import { setIsAuth } from '../../store/actions';
 import { AppDispatch, RootState } from '../../store/reducer';
 import { Logo } from '../Logo';
 
+
 const StyledHeader = styled.header`
-    height: 7vh;
+    height: 118px;
     padding: 27px 36px 28px 41px;
     background: #E4B062;
 

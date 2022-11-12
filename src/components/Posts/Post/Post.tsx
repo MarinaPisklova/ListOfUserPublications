@@ -12,24 +12,36 @@ interface IPostProps {
 
 const PostWrapper = styled.div`
   padding: 20px 16px 26px;
-  margin-bottom: 7px;
+  margin: 0 auto;
+  max-width: 800px;
+  height: 320px;
 
   border: 5px solid #27569C;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
   list-style-type: none;
 
+  @media (max-width: 900px){
+    height: 400px;
+  }
+
   @media (max-width: 744px){
     padding: 20px 19px 26px;
     margin-bottom: 12px;
   }
+
+  @media (max-width: 460px){
+    height: 470px;
+  }
+
   @media (max-width: 400px){
+    height: 250px;
     width: 100%;
     padding: 13px 12px 25px;
   }
 `
 const HeaderPostWrapper = styled(Flex)`
-  @media (max-width: 744px){
+  @media (max-width: 460px){
     flex-direction: column;
     margin: 0 0 16px 0;
   }
@@ -71,15 +83,9 @@ const PostTitle = styled(Text)`
   }
 `
 
-
-
-
 export function Post(props: IPostProps) {
-  const router = useNavigate();
-
-
   return (
-    <PostWrapper onClick={()=> router(`/posts/${props.post.postId}`)}>
+    <PostWrapper>
       <HeaderPostWrapper margin='0 0 22px 0' align='flex-start' justify='flex-start'>
         <PostImage margin='0 30px 0 0' src={props.post.img} />
         <Flex direction='column' align='flex-start'>

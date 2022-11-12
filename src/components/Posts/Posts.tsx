@@ -13,11 +13,10 @@ import { Post } from './Post/Post';
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import InfiniteLoader from "react-window-infinite-loader";
+import { useWindowResize } from '../../hooks/useWindowResize';
 
 const Li = styled.li`
   list-style-type: none;
-  flex: 1 1 40%;
-  display: flex;
 
   @media (max-width: 750px){
     flex: 1 1 40%;
@@ -29,7 +28,6 @@ const Li = styled.li`
 `
 const Content = styled.div`
   height: 93vh;
-  max-width: 987px;
   margin: 0 auto;
   padding: 20px 20px;
 
@@ -56,7 +54,7 @@ const XLoader = styled.div`
 
 `
 
-const XList = styled(List)`
+const ListNoScrollbar = styled(List)`
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 
@@ -84,6 +82,7 @@ export function Posts() {
   const error = useSelector<RootState, string>(state => state.postsData.error);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [itemSizes, setItemSizes] = useState(350);
 
   useEffect(() => {
     dispatch(postsRequestAsync(page));
@@ -103,14 +102,37 @@ export function Posts() {
     });
   };
 
+  const [windowWidth] = useWindowResize();
+  
+  useEffect(() => {
+   console.log(windowWidth);
+
+   if(windowWidth >= 900)
+   {
+    setItemSizes(350);
+   }
+   if(windowWidth < 900 && windowWidth >= 460)
+   {
+    setItemSizes(420);
+   }
+   else if(windowWidth < 460 && windowWidth >= 400)
+   {
+    setItemSizes(480);
+   }
+   else if(windowWidth < 400)
+   {
+    setItemSizes(260);
+   }
+  }, [windowWidth]);
+
+
   return (
     <Content>
-      {/* <ContentFlex wrap='wrap' align='stretch' gap={"13px"}> */}
       {!error ? (
         posts.length
           ?
           <AutoSizer>
-            {({ height, width }) => (
+             {({ height, width }) => (
               <InfiniteLoader
                 isItemLoaded={isItemLoaded}
                 itemCount={1000}
@@ -118,18 +140,18 @@ export function Posts() {
                 threshold={5}
               >
                 {({ onItemsRendered, ref }) => (
-                  <XList
+                  <ListNoScrollbar
                     className="List"
-                    height={height}
+                    height={height - 80}
                     width={width}
                     itemCount={posts.length}
-                    itemSize={350}
+                    itemSize={itemSizes}
                     itemData={posts}
                     onItemsRendered={onItemsRendered}
                     ref={ref}
                   >
                     {PostElement}
-                  </XList>
+                  </ListNoScrollbar>
                 )}
               </InfiniteLoader>
             )}
@@ -139,7 +161,6 @@ export function Posts() {
       ) : (
         <Error message={error} />
       )}
-      {/* </ContentFlex> */}
     </Content>
   )
 }
