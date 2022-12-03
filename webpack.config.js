@@ -68,14 +68,17 @@ module.exports = {
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
-                        outputPath :  '/images/'
+                        outputPath: '/images/'
                     }
                 },
             ],
         }
         ]
     },
-    plugins: [new HTMLWebpackPlugin({ template: path.resolve(__dirname, 'index.html') })],
+    plugins: [new HTMLWebpackPlugin({
+        template: path.resolve(__dirname, 'index.html'),
+        favicon: path.resolve(__dirname, 'src/static/favicon.png'),
+    })],
     devServer: {
         historyApiFallback: true,
         port: 3000,

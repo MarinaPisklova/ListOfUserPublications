@@ -27,7 +27,7 @@ const Li = styled.li`
   }
 `
 const Content = styled.div`
-  height: 93vh;
+  height: 87vh;
   margin: 0 auto;
   padding: 20px 20px;
 
@@ -142,7 +142,7 @@ export function Posts() {
                 {({ onItemsRendered, ref }) => (
                   <ListNoScrollbar
                     className="List"
-                    height={height - 80}
+                    height={height - 20}
                     width={width}
                     itemCount={posts.length}
                     itemSize={itemSizes}
